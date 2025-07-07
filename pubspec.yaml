@@ -1,0 +1,96 @@
+name: solar_city_v2
+description: "A new Flutter project for Solar City v2." # You can customize this
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.6+16
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  audioplayers: ^6.0.0 # <--- CORRECT (same indent level as flutter:)
+
+  # Firebase
+  firebase_core: ^3.1.1
+  firebase_auth: ^5.1.1
+
+  # Google APIs
+  google_sign_in: 5.4.4
+  googleapis: ^14.0.0
+  googleapis_auth: ^2.0.0
+
+  # Networking & Local Storage
+  http: ^1.2.1
+  shared_preferences: ^2.2.3
+
+  # Device Features & Utilities
+  camera: ^0.11.0+1
+  geolocator: ^14.0.1
+  geocoding: ^4.0.0
+  image: ^4.2.0
+  path_provider: ^2.1.3
+  intl: ^0.20.2
+  permission_handler: ^12.0.0+1
+  uuid: ^4.4.0
+  connectivity_plus: ^6.0.3
+
+
+
+  # UI
+  cupertino_icons: ^1.0.6
+
+
+dev_dependencies:
+  flutter_launcher_icons: ^0.14.4 # You already have this, good!
+  cloud_firestore: ^5.0.2
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# NEW SECTION: flutter_launcher_icons configuration
+# This should be at the same indentation level as 'name:', 'dependencies:', etc.
+flutter_launcher_icons:
+  android: "launcher_icon" # Or true
+  ios: true
+
+  # Path to the image asset for the adaptive icon foreground
+  adaptive_icon_foreground: "assets/images/logo_adaptive_foreground.png"
+
+  # Background for the adaptive icon (can be a color or an image asset)
+  adaptive_icon_background: "#FFFFFF" # Example: White background. Change as needed.
+  # To use an image instead:
+  # adaptive_icon_background: "assets/images/your_background_image.png"
+
+  # Path for older Android versions and as a base for iOS if needed.
+  # If your adaptive_icon_foreground is suitable (e.g., already somewhat squarish
+  # or you want the adaptive_icon_background to fill transparency for iOS),
+  # you can use the same image.
+  image_path: "assets/images/logo_adaptive_foreground.png" # Or a path to a more general 1024x1024 icon
+
+  remove_alpha_ios: true # Good to have if image_path has transparency and you want a solid bg for iOS
+
+
+# The following section is specific to Flutter packages.
+flutter:
+  uses-material-design: true
+
+  # MODIFIED SECTION: assets
+  # Ensure your images folder is declared here
+  assets:
+    - assets/images/ # This line includes all files under assets/images/
+    - assets/sounds/
+  #   - images/a_dot_burr.jpeg # Example from your old code, remove if not used
+  #   - images/a_dot_ham.jpeg  # Example from your old code, remove if not used
+
+  # ... your fonts section, if any ...

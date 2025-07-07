@@ -1,0 +1,113 @@
+{
+  "project_info": {
+    "project_number": "428486523725",
+    "project_id": "solar-city-electrician-app",
+    "storage_bucket": "solar-city-electrician-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:428486523725:android:16e5c4ac8bbd5c287e9504",
+        "android_client_info": {
+          "package_name": "com.example.solar_city_v2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "428486523725-7ud0br3iuorbb3qkdubt7la77tl3rbfg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAw1R6YtWPoOrtJ477tZ4Zw4_xIdi2FvY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "428486523725-7ud0br3iuorbb3qkdubt7la77tl3rbfg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:428486523725:android:767d6f434ac49f8b7e9504",
+        "android_client_info": {
+          "package_name": "com.example.solarcityelectricians"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "428486523725-7ud0br3iuorbb3qkdubt7la77tl3rbfg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAw1R6YtWPoOrtJ477tZ4Zw4_xIdi2FvY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "428486523725-7ud0br3iuorbb3qkdubt7la77tl3rbfg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:428486523725:android:099adbc070c2f6cc7e9504",
+        "android_client_info": {
+          "package_name": "com.solarcityuk.solar_city_v2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "428486523725-nhrm262lf0r0mlc6egjpnkfs1b84gmhr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.solarcityuk.solar_city_v2",
+            "certificate_hash": "eb82a99129a3465c2b857e00076b98f74224b1fe"
+          }
+        },
+        {
+          "client_id": "428486523725-rfbcnot2da6v5nm0s0ou19b4lc0spnp3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.solarcityuk.solar_city_v2",
+            "certificate_hash": "f4e65c21a0e6295f25b9bf030f214258c5d812f6"
+          }
+        },
+        {
+          "client_id": "428486523725-7ud0br3iuorbb3qkdubt7la77tl3rbfg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAw1R6YtWPoOrtJ477tZ4Zw4_xIdi2FvY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "428486523725-7ud0br3iuorbb3qkdubt7la77tl3rbfg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
