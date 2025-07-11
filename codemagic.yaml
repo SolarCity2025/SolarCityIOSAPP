@@ -4,7 +4,7 @@ workflows:
     instance_type: mac_mini_m1
     environment:
       groups:
-        - app_store_connect_credentials # This loads the key into the environment
+        - app_store_connect_credentials
       flutter: stable
       xcode: latest
       cocoapods: default
@@ -29,5 +29,7 @@ workflows:
       - build/ios/ipa/*.ipa
     publishing:
       app_store_connect:
-        api_key: $APP_STORE_CONNECT_API_KEY  # <-- THIS IS THE FIX
+        api_key: $APP_STORE_CONNECT_API_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
         submit_to_testflight: true
