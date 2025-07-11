@@ -5,6 +5,9 @@ workflows:
     environment:
       groups:
         - app_store_connect_credentials
+      vars:
+        # Add your Bundle ID here
+        BUNDLE_ID: "com.solarcityuk.solarCityV2"
       flutter: stable
       xcode: latest
       cocoapods: default
@@ -27,15 +30,11 @@ workflows:
           fi
       - name: Flutter packages get
         script: flutter packages pub get
+      - name: Set Bundle ID in Xcode project
+        script: /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_ID" "ios/Runner/Info.plist"
       - name: Set up code signing for App Store distribution
         script: xcode-project use-profiles --profile-type=APP_STORE
       - name: Build iOS App
         script: flutter build ipa --release
     artifacts:
       - build/ios/ipa/*.ipa
-    publishing:
-      app_store_connect:
-        api_key: $APP_STORE_CONNECT_API_KEY
-        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
-        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
-        submit_to_testflight: true
