@@ -1,7 +1,7 @@
 workflows:
   ios-workflow:
     name: iOS App Build
-    instance_type: mac_mini_m2 # Updated to M2 as per the build warning
+    instance_type: mac_mini_m2
     environment:
       groups:
         - app_store_connect_credentials
@@ -25,15 +25,10 @@ workflows:
             echo "IPHONEOS_DEPLOYMENT_TARGET = 13.0" >> ios/Flutter/Debug.xcconfig
             echo "IPHONEOS_DEPLOYMENT_TARGET = 13.0" >> ios/Flutter/Release.xcconfig
           fi
-
-      # --- THIS IS THE MISSING BUILD SCRIPT ---
       - name: Flutter packages get
         script: flutter packages pub get
-
       - name: Build iOS App
         script: flutter build ipa --release
-      # --- END OF MISSING SCRIPT ---
-
     artifacts:
       - build/ios/ipa/*.ipa
     publishing:
