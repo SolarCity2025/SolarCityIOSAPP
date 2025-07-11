@@ -6,7 +6,6 @@ workflows:
       groups:
         - app_store_connect_credentials
       vars:
-        # Add your Bundle ID here
         BUNDLE_ID: "com.solarcityuk.solarCityV2"
       flutter: stable
       xcode: latest
@@ -15,16 +14,14 @@ workflows:
       - name: Set iOS deployment target
         script: | 
           #!/bin/sh
-          set -e
-          set -x
+          # ... (this script remains the same)
+          set -e; set -x;
           PODFILE_PATH=$(find ios -name Podfile)
           if [ -f "$PODFILE_PATH" ]; then
             sed -i.bak "2i\\
             platform :ios, '13.0'
             " "$PODFILE_PATH"
-            echo "Podfile successfully modified."
           else
-            echo "Podfile not found, attempting to set via .xcconfig"
             echo "IPHONEOS_DEPLOYMENT_TARGET = 13.0" >> ios/Flutter/Debug.xcconfig
             echo "IPHONEOS_DEPLOYMENT_TARGET = 13.0" >> ios/Flutter/Release.xcconfig
           fi
@@ -32,9 +29,21 @@ workflows:
         script: flutter packages pub get
       - name: Set Bundle ID in Xcode project
         script: /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_ID" "ios/Runner/Info.plist"
-      - name: Set up code signing for App Store distribution
-        script: xcode-project use-profiles --profile-type=APP_STORE
+      - name: Create App Store export options
+        script: | 
+          cat > /tmp/ExportOptions.plist << EOL
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>app-store</string>
+            <key>signingStyle</key>
+            <string>automatic</string>
+          </dict>
+          </plist>
+          EOL
       - name: Build iOS App
-        script: flutter build ipa --release
+        script: flutter build ipa --release --export-options-plist=/tmp/ExportOptions.plist
     artifacts:
       - build/ios/ipa/*.ipa
