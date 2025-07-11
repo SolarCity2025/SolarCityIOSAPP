@@ -1,0 +1,30 @@
+workflows:
+  ios-workflow:
+    name: iOS App Build
+    instance_type: mac_mini_m1
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Set iOS deployment target
+        script: | 
+          #!/bin/sh
+          set -e
+          set -x
+          PODFILE_PATH=$(find ios -name Podfile)
+          if [ -f "$PODFILE_PATH" ]; then
+            sed -i.bak "2i\\
+            platform :ios, '13.0'
+            " "$PODFILE_PATH"
+            echo "Podfile successfully modified."
+          else
+            echo "Podfile not found, attempting to set via .xcconfig"
+            echo "IPHONEOS_DEPLOYMENT_TARGET = 13.0" >> ios/Flutter/Debug.xcconfig
+            echo "IPHONEOS_DEPLOYMENT_TARGET = 13.0" >> ios/Flutter/Release.xcconfig
+          fi
+    artifacts:
+      - build/ios/ipa/*.ipa
+    publishing:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_API_KEY
