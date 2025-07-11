@@ -3,6 +3,8 @@ workflows:
     name: iOS App Build
     instance_type: mac_mini_m1
     environment:
+      groups:
+        - app_store_connect_credentials # This connects the key you added
       flutter: stable
       xcode: latest
       cocoapods: default
@@ -25,6 +27,3 @@ workflows:
           fi
     artifacts:
       - build/ios/ipa/*.ipa
-    publishing:
-      app_store_connect:
-        api_key: $APP_STORE_CONNECT_API_KEY
