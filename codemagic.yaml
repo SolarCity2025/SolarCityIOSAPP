@@ -29,4 +29,4 @@ workflows:
       - build/ios/ipa/*.ipa
     publishing:
       app_store_connect:
-        submit_to_testflight: true # Explicitly tell it to upload to TestFlight
+        submit_to_testflight: true
