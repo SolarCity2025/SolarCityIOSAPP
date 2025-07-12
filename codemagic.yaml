@@ -4,9 +4,9 @@ workflows:
     instance_type: mac_mini_m2
     environment:
       groups:
-        - app_store_connect_credentials
+        - app_store_connect_credentials # This group provides the API keys AND makes certs/profiles available
       vars:
-        BUNDLE_ID: "com.solarcityuk.solarCityV2" # Make sure this is your exact Bundle ID
+        BUNDLE_ID: "com.solarcityuk.solarCityV2"
       flutter: stable
       xcode: latest
       cocoapods: default
@@ -30,7 +30,10 @@ workflows:
       - name: Set Bundle ID in Xcode project
         script: /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_ID" "ios/Runner/Info.plist"
       - name: Build iOS App
-        script: flutter build ipa --release
+        script: | # <-- This script is updated
+          set -ex
+          flutter build ipa --release \
+            --export-options-plist=$CM_EXPORT_OPTIONS_PATH
     artifacts:
       - build/ios/ipa/*.ipa
     publishing:
