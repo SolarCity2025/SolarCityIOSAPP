@@ -29,9 +29,16 @@ workflows:
         script: flutter packages pub get
       - name: Set Bundle ID in Xcode project
         script: /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_ID" "ios/Runner/Info.plist"
+      - name: Force Automatic Signing
+        script: | 
+          #!/bin/sh
+          set -ex
+          XCODE_PROJECT="ios/Runner.xcodeproj/project.pbxproj"
+          sed -i.bak -e 's/ProvisioningStyle = Manual;/ProvisioningStyle = Automatic;/g' $XCODE_PROJECT
       - name: Build iOS App
         script: | 
           set -ex
+          flutter clean
           flutter build ipa --release --export-method app-store
     artifacts:
       - build/ios/ipa/*.ipa
