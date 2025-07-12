@@ -7,6 +7,7 @@ workflows:
         - app_store_connect_credentials
       vars:
         BUNDLE_ID: "com.solarcityuk.solarCityV2"
+        APPLE_TEAM_ID: $APPLE_TEAM_ID # Make sure this is added to your group
       flutter: stable
       xcode: latest
       cocoapods: default
@@ -29,11 +30,14 @@ workflows:
         script: flutter packages pub get
       - name: Set Bundle ID in Xcode project
         script: /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_ID" "ios/Runner/Info.plist"
-      - name: Force Automatic Signing
+      - name: Force Automatic Signing and Team ID
         script: | 
           #!/bin/sh
           set -ex
           XCODE_PROJECT="ios/Runner.xcodeproj/project.pbxproj"
+          # Force the Team ID
+          sed -i.bak -e "s/DEVELOPMENT_TEAM = .*;/DEVELOPMENT_TEAM = $APPLE_TEAM_ID;/g" $XCODE_PROJECT
+          # Force Automatic Signing
           sed -i.bak -e 's/ProvisioningStyle = Manual;/ProvisioningStyle = Automatic;/g' $XCODE_PROJECT
       - name: Build iOS App
         script: | 
