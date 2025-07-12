@@ -6,7 +6,7 @@ workflows:
       groups:
         - app_store_connect_credentials
       vars:
-        BUNDLE_ID: "com.solarcityuk.solarCityV2"
+        BUNDLE_ID: "com.solarcityuk.solarCityV2" # Make sure this is your exact Bundle ID
       flutter: stable
       xcode: latest
       cocoapods: default
@@ -21,9 +21,7 @@ workflows:
             sed -i.bak "2i\\
             platform :ios, '13.0'
             " "$PODFILE_PATH"
-            echo "Podfile successfully modified."
           else
-            echo "Podfile not found, attempting to set via .xcconfig"
             echo "IPHONEOS_DEPLOYMENT_TARGET = 13.0" >> ios/Flutter/Debug.xcconfig
             echo "IPHONEOS_DEPLOYMENT_TARGET = 13.0" >> ios/Flutter/Release.xcconfig
           fi
@@ -31,9 +29,12 @@ workflows:
         script: flutter packages pub get
       - name: Set Bundle ID in Xcode project
         script: /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_ID" "ios/Runner/Info.plist"
-      - name: Set up code signing for Development
-        script: xcode-project use-profiles --profile-type=DEVELOPMENT
       - name: Build iOS App
         script: flutter build ipa --release
     artifacts:
       - build/ios/ipa/*.ipa
+    publishing:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_API_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
