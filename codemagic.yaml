@@ -4,49 +4,26 @@ workflows:
     instance_type: mac_mini_m2
     environment:
       groups:
-        - app_store_connect_credentials # Ensure this group contains your API Key, Key ID, Issuer ID, and Apple Team ID
+        - app_store_connect_credentials
       vars:
         BUNDLE_ID: "com.solarcityuk.solarCityV2"
-        # APPLE_TEAM_ID is expected to be in the 'app_store_connect_credentials' group
       flutter: stable
       xcode: latest
       cocoapods: default
     scripts:
+      - name: Set up native iOS targets
+        script: xcode-project-use-native-targets
       - name: Initialize Keychain
-        script: | 
-          keychain initialize
+        script: keychain initialize
       - name: Fetch signing files
         script: | 
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --type IOS_APP_STORE \
             --create
-      - name: Set iOS deployment target
-        script: | 
-          # Your script to set the deployment target remains the same
-          #!/bin/sh
-          set -e
-          set -x
-          PODFILE_PATH=$(find ios -name Podfile)
-          if [ -f "$PODFILE_PATH" ]; then
-            sed -i.bak "2i\\
-            platform :ios, '13.0'
-            " "$PODFILE_PATH"
-          else
-            echo "IPHONEOS_DEPLOYMENT_TARGET = 13.0" >> ios/Flutter/Debug.xcconfig
-            echo "IPHONEOS_DEPLOYMENT_TARGET = 13.0" >> ios/Flutter/Release.xcconfig
-          fi
       - name: Flutter packages get
         script: flutter packages pub get
       - name: Set Bundle ID in Xcode project
         script: /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_ID" "ios/Runner/Info.plist"
-      - name: Force Automatic Signing and Team ID
-        script: | 
-          # This script can often be removed when using fetch-signing-files, but is safe to keep
-          #!/bin/sh
-          set -ex
-          XCODE_PROJECT="ios/Runner.xcodeproj/project.pbxproj"
-          sed -i.bak -e "s/DEVELOPMENT_TEAM = .*;/DEVELOPMENT_TEAM = $APPLE_TEAM_ID;/g" $XCODE_PROJECT
-          sed -i.bak -e 's/ProvisioningStyle = Manual;/ProvisioningStyle = Automatic;/g' $XCODE_PROJECT
       - name: Build iOS App
         script: | 
           set -ex
@@ -55,6 +32,6 @@ workflows:
       - build/ios/ipa/*.ipa
     publishing:
       app_store_connect:
-        api_key: $APP_STORE_CONNECT_API_KEY
+        api_key: $APP_STORE_CONNECT_API_KEY # Codemagic automatically maps this to the correct variable
         key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
         issuer_id: $APP_STORE_CONNECT_ISSUER_ID
