@@ -4,16 +4,25 @@ workflows:
     instance_type: mac_mini_m2
     environment:
       groups:
-        - app_store_connect_credentials
+        - app_store_connect_credentials # Ensure this group contains your API Key, Key ID, Issuer ID, and Apple Team ID
       vars:
         BUNDLE_ID: "com.solarcityuk.solarCityV2"
-        APPLE_TEAM_ID: $APPLE_TEAM_ID # Make sure this is added to your group
+        # APPLE_TEAM_ID is expected to be in the 'app_store_connect_credentials' group
       flutter: stable
       xcode: latest
       cocoapods: default
     scripts:
+      - name: Initialize Keychain
+        script: | 
+          keychain initialize
+      - name: Fetch signing files
+        script: | 
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --create
       - name: Set iOS deployment target
         script: | 
+          # Your script to set the deployment target remains the same
           #!/bin/sh
           set -e
           set -x
@@ -32,17 +41,15 @@ workflows:
         script: /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_ID" "ios/Runner/Info.plist"
       - name: Force Automatic Signing and Team ID
         script: | 
+          # This script can often be removed when using fetch-signing-files, but is safe to keep
           #!/bin/sh
           set -ex
           XCODE_PROJECT="ios/Runner.xcodeproj/project.pbxproj"
-          # Force the Team ID
           sed -i.bak -e "s/DEVELOPMENT_TEAM = .*;/DEVELOPMENT_TEAM = $APPLE_TEAM_ID;/g" $XCODE_PROJECT
-          # Force Automatic Signing
           sed -i.bak -e 's/ProvisioningStyle = Manual;/ProvisioningStyle = Automatic;/g' $XCODE_PROJECT
       - name: Build iOS App
         script: | 
           set -ex
-          flutter clean
           flutter build ipa --release --export-method app-store
     artifacts:
       - build/ios/ipa/*.ipa
