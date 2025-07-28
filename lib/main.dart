@@ -755,7 +755,8 @@ Future<void> _handleProjectTap(ProjectInfo project) async {
                 .name}'.");
         return;
       }
-      final newFolderId = await _createSiteFolder(project.name, parentFolderId);
+      // This is the new, improved line that finds an existing folder or creates one
+final newFolderId = await _findOrCreateSiteFolder(_driveApi!, project.name, parentFolderId);
       debugPrint(
           "--- _handleProjectTap: Project '${project
               .name}': Created Drive folder ID: $newFolderId");
@@ -961,7 +962,7 @@ Future<void> _handleProjectTap(ProjectInfo project) async {
   }
 
   Future<String> _getOrCreateParentFolder(drive.DriveApi driveApi) async {
-        const parentFolderName = "Company Job Photos";
+        const parentFolderName = "Job Proposals";
         const query = "mimeType='application/vnd.google-apps.folder' and name='$parentFolderName' and trashed=false";
         debugPrint("[Drive Debug] Querying for parent folder: $query");
         try {
@@ -1032,6 +1033,32 @@ Future<void> _handleProjectTap(ProjectInfo project) async {
   }
 
   // Inside _ProjectListScreenState class
+
+  Future<String> _findOrCreateSiteFolder(drive.DriveApi driveApi, String name, String parentId) async {
+  // Search query to find a folder with the specific name inside the parent folder
+  final query = "mimeType='application/vnd.google-apps.folder' and name='$name' and '$parentId' in parents and trashed=false";
+  debugPrint("[Drive Debug] Searching for existing site folder with query: $query");
+
+  try {
+    final result = await driveApi.files.list(q: query, $fields: 'files(id, name)');
+
+    // If the folder is found, return its ID
+    if (result.files != null && result.files!.isNotEmpty) {
+      final existingFolderId = result.files!.first.id!;
+      debugPrint("[Drive Debug] Found existing site folder '${result.files!.first.name}' with ID: $existingFolderId");
+      return existingFolderId;
+    }
+    // If no folder is found, create a new one
+    else {
+      debugPrint("[Drive Debug] Site folder '$name' not found. Creating it...");
+      return await _createSiteFolder(name, parentId); // Re-uses your existing creation logic
+    }
+  } catch (e, s) {
+    debugPrint("[Drive Debug] CRITICAL ERROR in _findOrCreateSiteFolder for site '$name': $e");
+    debugPrint("[Drive Debug] Stack trace for _findOrCreateSiteFolder: $s");
+    throw Exception("Error finding or creating site folder '$name': $e"); // Re-throw
+  }
+}
 
   Future<void> _syncOfflineProjects() async {
     debugPrint("--- _syncOfflineProjects ENTERED (Timestamp: ${DateTime.now()}) ---");
