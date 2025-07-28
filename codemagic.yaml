@@ -6,7 +6,7 @@ workflows:
       groups:
         - app_store_connect_credentials
       vars:
-        BUNDLE_ID: "com.solarcityuk.solarCityV2"
+        BUNDLE_ID: "com.solarcityuk.solarCityMobile"
       flutter: stable
       xcode: latest
       cocoapods: default
@@ -32,4 +32,4 @@ workflows:
       app_store_connect:
         api_key: $APP_STORE_CONNECT_API_KEY
         key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
-        issuer_id: $APP_STORE_CONNECT_ISSUER_IDe
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
