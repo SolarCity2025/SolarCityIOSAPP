@@ -4,13 +4,12 @@ workflows:
     instance_type: mac_mini_m2
     environment:
       groups:
-        - app_store_connect_credentials # This should contain your API Key info
+        - app_store_connect_credentials
       vars:
         BUNDLE_ID: "com.solarcityuk.solarCityMobile"
         flutter: stable
       xcode: latest
       cocoapods: default
-    # This block REPLACES the manual signing scripts
     ios_signing:
       distribution_type: app_store
       bundle_identifier: com.solarcityuk.solarCityMobile
