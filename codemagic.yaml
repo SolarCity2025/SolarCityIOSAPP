@@ -4,26 +4,19 @@ workflows:
     instance_type: mac_mini_m2
     environment:
       groups:
-        - app_store_connect_credentials
+        - app_store_connect_credentials # This should contain your API Key info
       vars:
         BUNDLE_ID: "com.solarcityuk.solarCityMobile"
         flutter: stable
       xcode: latest
       cocoapods: default
+    # This block REPLACES the manual signing scripts
+    ios_signing:
+      distribution_type: app_store
+      bundle_identifier: com.solarcityuk.solarCityMobile
     scripts:
-      - name: Initialize Keychain
-        script: keychain initialize
-      - name: Fetch signing files
-        script: | 
-          app-store-connect fetch-signing-files "$BUNDLE_ID" \
-            --type IOS_APP_STORE \
-            --create
-      - name: Use signing files
-        script: xcode-project use-profiles
       - name: Flutter packages get
         script: flutter packages pub get
-      - name: Set Bundle ID in Xcode project
-        script: /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_ID" "ios/Runner/Info.plist"
       - name: Build iOS App
         script: | 
           set -ex
@@ -32,6 +25,6 @@ workflows:
       - build/ios/ipa/*.ipa
     publishing:
       app_store_connect:
-        api_key: $APP_STORE_CONNECT_API_KEY
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
         key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
         issuer_id: $APP_STORE_CONNECT_ISSUER_ID
