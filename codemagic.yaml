@@ -7,8 +7,7 @@ workflows:
         - app_store_connect_credentials
       vars:
         BUNDLE_ID: "com.solarcityuk.solarCityMobile"
-        IOS_CERT_REFERENCE_NAME: "SolarCityUK New App Store Distribution Cert"
-      flutter: stable
+        flutter: stable
       xcode: latest
       cocoapods: default
     scripts:
@@ -19,6 +18,8 @@ workflows:
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --type IOS_APP_STORE \
             --create
+      - name: Use signing files
+        script: xcode-project use-profiles
       - name: Flutter packages get
         script: flutter packages pub get
       - name: Set Bundle ID in Xcode project
@@ -32,5 +33,3 @@ workflows:
     publishing:
       app_store_connect:
         api_key: $APP_STORE_CONNECT_API_KEY
-        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
-        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
