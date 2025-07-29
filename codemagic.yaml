@@ -1,16 +1,20 @@
 workflows:
   ios-workflow:
-    name: iOS App Build - Final Reset
+    name: iOS App Build - Script Method
     instance_type: mac_mini_m2
     environment:
       groups:
         - appstore_credentials
       vars:
         BUNDLE_ID: "com.solarcityuk.solarCityMobile"
-    ios_signing:
-      distribution_type: app_store
-      bundle_identifier: com.solarcityuk.solarCityMobile
     scripts:
+      - name: Initialize Keychain
+        script: keychain initialize
+      - name: Fetch signing files
+        script: | 
+          app-store-connect fetch-signing-files "$BUNDLE_ID" --type IOS_APP_STORE --create
+      - name: Use signing files
+        script: xcode-project use-profiles
       - name: Flutter packages get
         script: flutter packages pub get
       - name: Build iOS App
