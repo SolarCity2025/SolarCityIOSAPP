@@ -1,26 +1,23 @@
 workflows:
   ad-hoc-build:
-    # These properties are indented with 2 spaces
-    name: Internal Build for Employees
+    name: Internal Build - Script Method
     instance_type: mac_mini_m2
     environment:
-      # This property is indented with 4 spaces
       groups:
         - appstore_credentials
       vars:
-        BUNDLE_ID: "com.solarcityuk.solarCityMobile"
-
-    # 'ios_signing' must also be indented with 2 spaces
-    ios_signing:
-      # These properties are indented with 4 spaces
-      distribution_type: ad_hoc
-      bundle_identifier: com.solarcityuk.solarCityMobile
-
+        BUNDLE_ID: "com.solarcityuk.solarCityV2" # This now matches your project
     scripts:
+      - name: Initialize Keychain
+        script: keychain initialize
+      - name: Fetch signing files for Ad Hoc
+        script: | 
+          app-store-connect fetch-signing-files "$BUNDLE_ID" --type AD_HOC --create
+      - name: Use signing files
+        script: xcode-project use-profiles
       - name: Flutter packages get
         script: flutter packages pub get
       - name: Build iOS App
         script: flutter build ipa --export-method ad-hoc
-
     artifacts:
       - build/ios/ipa/*.ipa
