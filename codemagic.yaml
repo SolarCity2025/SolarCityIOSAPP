@@ -1,28 +1,26 @@
 workflows:
-  ios-workflow:
-    name: iOS App Build - Script Method
+  ad-hoc-build:
+    # These properties are indented with 2 spaces
+    name: Internal Build for Employees
     instance_type: mac_mini_m2
     environment:
+      # This property is indented with 4 spaces
       groups:
         - appstore_credentials
       vars:
         BUNDLE_ID: "com.solarcityuk.solarCityMobile"
+
+    # 'ios_signing' must also be indented with 2 spaces
+    ios_signing:
+      # These properties are indented with 4 spaces
+      distribution_type: ad_hoc
+      bundle_identifier: com.solarcityuk.solarCityMobile
+
     scripts:
-      - name: Initialize Keychain
-        script: keychain initialize
-      - name: Fetch signing files
-        script: | 
-          app-store-connect fetch-signing-files "$BUNDLE_ID" --type IOS_APP_STORE --create
-      - name: Use signing files
-        script: xcode-project use-profiles
       - name: Flutter packages get
         script: flutter packages pub get
       - name: Build iOS App
-        script: flutter build ipa --release --export-method app-store
+        script: flutter build ipa --export-method ad-hoc
+
     artifacts:
       - build/ios/ipa/*.ipa
-    publishing:
-      app_store_connect:
-        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
-        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
-        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
