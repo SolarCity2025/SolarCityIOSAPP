@@ -6,13 +6,13 @@ workflows:
       groups:
         - appstore_credentials
       vars:
-        BUNDLE_ID: "com.solarcityuk.solarCityV2" # This now matches your project
+        BUNDLE_ID: "com.solarcityuk.solarCityV2"
     scripts:
       - name: Initialize Keychain
         script: keychain initialize
       - name: Fetch signing files for Ad Hoc
         script: | 
-          app-store-connect fetch-signing-files "$BUNDLE_ID" --type AD_HOC --create
+          app-store-connect fetch-signing-files "$BUNDLE_ID" --type IOS_APP_ADHOC --create
       - name: Use signing files
         script: xcode-project use-profiles
       - name: Flutter packages get
