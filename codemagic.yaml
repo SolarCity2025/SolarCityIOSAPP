@@ -1,6 +1,6 @@
 workflows:
-  ad-hoc-build:
-    name: Internal Build - Script Method
+  app-store-build:
+    name: Internal Build - TestFlight
     instance_type: mac_mini_m2
     environment:
       groups:
@@ -10,17 +10,19 @@ workflows:
     scripts:
       - name: Initialize Keychain
         script: keychain initialize
-      - name: Fetch signing files for Ad Hoc
+      - name: Fetch signing files for App Store
         script: | 
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
-            --type IOS_APP_ADHOC \
+            --type IOS_APP_STORE \
             --create \
-            --delete-stale-profiles # <-- ADD THIS FLAG
+            --delete-stale-profiles
       - name: Use signing files
         script: xcode-project use-profiles
       - name: Flutter packages get
         script: flutter packages pub get
       - name: Build iOS App
-        script: flutter build ipa --export-method ad-hoc
+        script: flutter build ipa --export-method app-store
+      - name: Publish to TestFlight
+        script: app-store-connect publish
     artifacts:
       - build/ios/ipa/*.ipa
