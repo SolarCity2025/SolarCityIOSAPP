@@ -6,7 +6,7 @@ workflows:
       groups:
         - appstore_credentials
       vars:
-        BUNDLE_ID: "com.solarcityuk.solarCityV2"
+        BUNDLE_ID: "com.solarcityuk.solarcityapp"
     scripts:
       - name: Initialize Keychain
         script: keychain initialize
